@@ -5,8 +5,8 @@
  * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
  * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
  * Copyright 2017-2018 XMR-Stak    <https://github.com/fireice-uk>, <https://github.com/psychocrypt>
- * Copyright 2018-2020 SChernykh   <https://github.com/SChernykh>
- * Copyright 2016-2020 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
+ * Copyright 2018-2022 SChernykh   <https://github.com/SChernykh>
+ * Copyright 2016-2022 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,40 +22,14 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_CUDAASTROBWTRUNNER_H
-#define XMRIG_CUDAASTROBWTRUNNER_H
+typedef uchar uint8_t;
+typedef ushort uint16_t;
+typedef uint uint32_t;
+typedef ulong uint64_t;
 
+typedef int int32_t;
+typedef long int64_t;
 
-#include "backend/cuda/runners/CudaBaseRunner.h"
-#include "base/crypto/Algorithm.h"
-
-
-namespace xmrig {
-
-
-class CudaAstroBWTRunner : public CudaBaseRunner
-{
-public:
-    static constexpr uint32_t BWT_DATA_MAX_SIZE = 560 * 1024 - 256;
-    static constexpr uint32_t BWT_DATA_STRIDE = (BWT_DATA_MAX_SIZE + 256 + 255) & ~255U;
-
-    CudaAstroBWTRunner(size_t index, const CudaLaunchData &data);
-
-protected:
-    inline size_t intensity() const override { return m_intensity; }
-    inline size_t roundSize() const override;
-    inline size_t processedHashes() const override;
-
-    bool run(uint32_t startNonce, uint32_t *rescount, uint32_t *resnonce) override;
-    bool set(const Job &job, uint8_t *blob) override;
-
-private:
-    size_t m_intensity  = 0;
-    Algorithm m_algorithm;
-};
-
-
-} /* namespace xmrig */
-
-
-#endif // XMRIG_CUDAASTROBWTRUNNER_H
+#include "BWT.cl"
+#include "salsa20.cl"
+#include "sha3.cl"
